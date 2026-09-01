@@ -892,6 +892,15 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   <data name="SelectPolicyFileBeforeRetrievingOptions" xml:space="preserve">
     <value>Please select a policy file before retrieving its rule options status.</value>
   </data>
+  <data name="RuleOptionsAppliedSuccessMsg" xml:space="preserve">
+    <value>Policy rule options were applied and saved successfully.</value>
+  </data>
+  <data name="RuleOptionsDroppedSupplementalMsg" xml:space="preserve">
+    <value>Applied and saved, but these options were not set because they don't apply to a Supplemental policy: {0}. Options like Audit Mode belong on the base policy - a supplemental inherits enforcement/audit from its base. Load the base policy to change them.</value>
+  </data>
+  <data name="RuleOptionsDroppedMsg" xml:space="preserve">
+    <value>Applied and saved, but these options were not set because they are not valid for this policy: {0}.</value>
+  </data>
   <data name="GetSecurePolicySettings_FillAllFields" xml:space="preserve">
     <value>Please fill in all three fields.</value>
   </data>

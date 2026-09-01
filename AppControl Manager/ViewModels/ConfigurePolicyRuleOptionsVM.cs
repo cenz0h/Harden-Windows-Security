@@ -172,9 +172,19 @@ internal sealed partial class ConfigurePolicyRuleOptionsVM : ViewModelBase
 			// Gather selected rules to add
 			List<OptionType> selectedOptions = GetSelectedPolicyRuleOptions();
 
+			// Options the user selected that don't survive CiRuleOptions.Set - e.g. base-only options
+			// such as Audit Mode requested on a Supplemental policy, which are stripped because
+			// supplementals inherit enforcement/audit from their base policy.
+			List<OptionType> droppedOptions = [];
+
 			await Task.Run(async () =>
 			{
 				SelectedPolicy.PolicyObj = CiRuleOptions.Set(SelectedPolicy.PolicyObj, rulesToAdd: selectedOptions, RemoveAll: true);
+
+				// Compare what was requested against what actually landed in the policy, so we can warn
+				// the user about silently-dropped options instead of reporting a misleading success.
+				HashSet<OptionType> appliedOptions = [.. SelectedPolicy.PolicyObj.Rules.Select(x => x.Item)];
+				droppedOptions = [.. selectedOptions.Where(o => !appliedOptions.Contains(o))];
 
 				if (SelectedPolicy.FilePath is not null)
 				{
@@ -187,6 +197,22 @@ internal sealed partial class ConfigurePolicyRuleOptionsVM : ViewModelBase
 
 				MainWindow.TriggerTransferIconAnimationStatic((UIElement)sender);
 			});
+
+			// Refresh the checkboxes so the UI reflects what was ACTUALLY applied - a dropped option
+			// (e.g. Audit Mode on a supplemental) will visibly uncheck itself instead of looking saved.
+			LoadPolicyOptionsFromXML();
+
+			if (droppedOptions.Count > 0)
+			{
+				bool isSupplemental = SelectedPolicy.PolicyObj.PolicyType is PolicyType.SupplementalPolicy;
+				MainInfoBar.WriteWarning(string.Format(
+					Atlas.GetStr(isSupplemental ? "RuleOptionsDroppedSupplementalMsg" : "RuleOptionsDroppedMsg"),
+					string.Join(", ", droppedOptions)));
+			}
+			else
+			{
+				MainInfoBar.WriteSuccess(Atlas.GetStr("RuleOptionsAppliedSuccessMsg"));
+			}
 
 			if (DeployAfterApplyingToggleButton)
 			{
