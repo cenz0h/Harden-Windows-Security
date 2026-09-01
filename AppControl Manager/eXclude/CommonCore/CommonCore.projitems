@@ -166,6 +166,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\IInvisibleCrumbar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\IPageHeaderProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MicrosoftGraph\AuthenticationCompanion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MicrosoftGraph\LenientStringConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MicrosoftGraph\Main.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MicrosoftGraph\MSGraphJsonContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MicrosoftGraph\ThreadSafeObservableCollection.cs" />

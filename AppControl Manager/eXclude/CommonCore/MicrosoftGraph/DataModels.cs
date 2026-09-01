@@ -545,6 +545,7 @@ internal sealed class OmaSettingBase64(
 
 	[JsonInclude]
 	[JsonPropertyName("value")]
+	[JsonConverter(typeof(LenientStringConverter))]
 	internal string? Value => value;
 }
 
