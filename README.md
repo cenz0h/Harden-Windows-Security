@@ -10,6 +10,15 @@
 
 </div>
 
+> [!NOTE]\
+> **AppLocker‑enabled variant.** This is a fork of [HotCakeX/Harden-Windows-Security](https://github.com/HotCakeX/Harden-Windows-Security). The **AppControl Manager** app in this fork adds AppLocker tooling that is not present upstream:
+> - **AppLocker Policy Editor** — open, view, edit and save AppLocker policy XML (with quick‑rule templates and live SID resolution).
+> - **AppLocker Simulation** — a "what‑if" that reports whether files would be Allowed or Blocked by a policy, without deploying it.
+> - **AppLocker Compare** — a semantic diff of two AppLocker policies.
+> - **AppLocker → App Control (WDAC) migration** — converts an existing AppLocker policy into a clean WDAC base policy plus a supplemental, with an optional file re‑scan to build faithful signer/hash rules.
+>
+> This variant is intentionally kept a few commits behind upstream as a trade‑off for the AppLocker abilities above. For the original, unmodified project, see [HotCakeX/Harden-Windows-Security](https://github.com/HotCakeX/Harden-Windows-Security).
+
 <div align="center">
 <a href="https://apps.microsoft.com/detail/9P7GGFL7DX57"><img src="https://raw.githubusercontent.com/HotCakeX/.github/12a994d0fd231bc9fd0104decece5851179910c0/Pictures/SVG/Badges/HardenSystemSecurityInstallBadge.svg" alt="Microsoft Store page of Harden System Security App"></a> <img src="https://raw.githubusercontent.com/HotCakeX/.github/102a789ed8d91dad3bad1eed72bb5f7fe7d72689/Pictures/Gifs/snowsgiving2phibiscarf-mid.gif" width="25" alt="Link"> <a href="https://apps.microsoft.com/detail/9PNG1JDDTGP8"><img src="https://raw.githubusercontent.com/HotCakeX/.github/refs/heads/main/Pictures/SVG/AppControlManager%20Install.svg" alt="AppControl Manager Install"></a>
 </div>
