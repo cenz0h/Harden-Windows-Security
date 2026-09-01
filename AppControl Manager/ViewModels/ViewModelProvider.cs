@@ -43,6 +43,10 @@ internal static class ViewModelProvider
 	private static readonly Lazy<CreateSupplementalPolicyVM> _createSupplementalPolicyVM = new(() => new(), false);
 	private static readonly Lazy<EventLogsPolicyCreationVM> _eventLogsPolicyCreationVM = new(() => new(), false);
 	private static readonly Lazy<SimulationVM> _simulationVM = new(() => new(), false);
+	private static readonly Lazy<AppLockerSimulationVM> _appLockerSimulationVM = new(() => new(), false);
+	private static readonly Lazy<AppLockerPolicyEditorVM> _appLockerPolicyEditorVM = new(() => new(), false);
+	private static readonly Lazy<AppLockerCompareVM> _appLockerCompareVM = new(() => new(), false);
+	private static readonly Lazy<AppLockerToWDACVM> _appLockerToWDACVM = new(() => new(), false);
 	private static readonly Lazy<MDEAHPolicyCreationVM> _mdeahPolicyCreationVM = new(() => new(), false);
 	private static readonly Lazy<ViewFileCertificatesVM> _viewFileCertificatesVM = new(() => new(), false);
 	private static readonly Lazy<CreatePolicyVM> _createPolicyVM = new(() => new(), false);
@@ -80,6 +84,10 @@ internal static class ViewModelProvider
 	internal static CreateSupplementalPolicyVM CreateSupplementalPolicyVM => _createSupplementalPolicyVM.Value;
 	internal static EventLogsPolicyCreationVM EventLogsPolicyCreationVM => _eventLogsPolicyCreationVM.Value;
 	internal static SimulationVM SimulationVM => _simulationVM.Value;
+	internal static AppLockerSimulationVM AppLockerSimulationVM => _appLockerSimulationVM.Value;
+	internal static AppLockerPolicyEditorVM AppLockerPolicyEditorVM => _appLockerPolicyEditorVM.Value;
+	internal static AppLockerCompareVM AppLockerCompareVM => _appLockerCompareVM.Value;
+	internal static AppLockerToWDACVM AppLockerToWDACVM => _appLockerToWDACVM.Value;
 	internal static MDEAHPolicyCreationVM MDEAHPolicyCreationVM => _mdeahPolicyCreationVM.Value;
 	internal static ViewFileCertificatesVM ViewFileCertificatesVM => _viewFileCertificatesVM.Value;
 	internal static MainWindowVM MainWindowVM => _mainWindowVM.Value;

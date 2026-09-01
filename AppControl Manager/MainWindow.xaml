@@ -495,6 +495,14 @@
                 <NavigationViewItem x:Name="AllowNewAppsNavItem" x:Uid="AllowNewAppsNavItem" Icon="{x:Bind ViewModel.AllowNewAppsIcon, Mode=OneWay}" Tag="AllowNewApps" />
                 <NavigationViewItem x:Name="PolicyEditorNavItem" x:Uid="PolicyEditorNavItem" Icon="{x:Bind ViewModel.PolicyEditorIcon, Mode=OneWay}" Tag="PolicyEditor" />
                 <NavigationViewItem x:Name="SimulationNavItem" x:Uid="SimulationNavItem" Icon="{x:Bind ViewModel.SimulationIcon, Mode=OneWay}" Tag="Simulation" />
+                <NavigationViewItem x:Name="AppLockerSimulationNavItem" x:Uid="AppLockerSimulationNavItem" Icon="{x:Bind ViewModel.AppLockerSimulationIcon, Mode=OneWay}" Tag="AppLockerSimulation" />
+                <NavigationViewItem x:Name="AppLockerPolicyEditorNavItem" x:Uid="AppLockerPolicyEditorNavItem" Icon="{x:Bind ViewModel.AppLockerPolicyEditorIcon, Mode=OneWay}" Tag="AppLockerPolicyEditor" />
+                <NavigationViewItem x:Name="AppLockerCompareNavItem" x:Uid="AppLockerCompareNavItem" Icon="{x:Bind ViewModel.AppLockerCompareIcon, Mode=OneWay}" Tag="AppLockerCompare" />
+                <NavigationViewItem x:Name="AppLockerToWDACNavItem" x:Uid="AppLockerToWDACNavItem" Tag="AppLockerToWDAC">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8AB;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem x:Name="FirewallSentinelNavItem" x:Uid="FirewallSentinelNavItem" Icon="{x:Bind ViewModel.FirewallSentinelIcon, Mode=OneWay}" Tag="FirewallSentinel" />
 
                 <!-- Info Gathering Group -->

@@ -227,6 +227,10 @@ internal sealed partial class MainWindowVM : ViewModelBase, IDisposable
 		typeof(Pages.CreateSupplementalPolicyFilesAndFoldersScanResults),
 		typeof(Pages.StrictKernelPolicyScanResults),
 		typeof(Pages.Simulation),
+		typeof(Pages.AppLockerSimulation),
+		typeof(Pages.AppLockerPolicyEditor),
+		typeof(Pages.AppLockerCompare),
+		typeof(Pages.AppLockerToWDAC),
 		typeof(Pages.GetSecurePolicySettings),
 		typeof(Pages.SystemInformation),
 		typeof(Pages.Analysis.EventLogs),
@@ -406,6 +410,30 @@ internal sealed partial class MainWindowVM : ViewModelBase, IDisposable
 			pages: [typeof(Pages.PolicyEditor)]
 		);
 
+		breadCrumbMappingsV2[typeof(Pages.AppLockerSimulation)] = new PageTitleMap
+		(
+			titles: [Atlas.GetStr("AppLockerSimulationNavItem/Content")],
+			pages: [typeof(Pages.AppLockerSimulation)]
+		);
+
+		breadCrumbMappingsV2[typeof(Pages.AppLockerPolicyEditor)] = new PageTitleMap
+		(
+			titles: [Atlas.GetStr("AppLockerPolicyEditorNavItem/Content")],
+			pages: [typeof(Pages.AppLockerPolicyEditor)]
+		);
+
+		breadCrumbMappingsV2[typeof(Pages.AppLockerCompare)] = new PageTitleMap
+		(
+			titles: [Atlas.GetStr("AppLockerCompareNavItem/Content")],
+			pages: [typeof(Pages.AppLockerCompare)]
+		);
+
+		breadCrumbMappingsV2[typeof(Pages.AppLockerToWDAC)] = new PageTitleMap
+		(
+			titles: [Atlas.GetStr("AppLockerToWDACNavItem/Content")],
+			pages: [typeof(Pages.AppLockerToWDAC)]
+		);
+
 		breadCrumbMappingsV2[typeof(Pages.Home)] = new PageTitleMap
 		(
 			titles: [Atlas.GetStr("HomeNavItem/Content")],
@@ -457,6 +485,10 @@ internal sealed partial class MainWindowVM : ViewModelBase, IDisposable
 		{ "ConfigurePolicyRuleOptions", typeof(Pages.ConfigurePolicyRuleOptions) },
 		{ "Logs", typeof(Pages.Logs) },
 		{ "Simulation", typeof(Pages.Simulation) },
+		{ "AppLockerSimulation", typeof(Pages.AppLockerSimulation) },
+		{ "AppLockerPolicyEditor", typeof(Pages.AppLockerPolicyEditor) },
+		{ "AppLockerCompare", typeof(Pages.AppLockerCompare) },
+		{ "AppLockerToWDAC", typeof(Pages.AppLockerToWDAC) },
 		{ "Deployment", typeof(Pages.DeploymentPage) },
 		{ "CreatePolicyFromEventLogs", typeof(Pages.EventLogsPolicyCreation) },
 		{ "CreatePolicyFromMDEAH", typeof(Pages.MDEAHPolicyCreation) },
@@ -504,6 +536,10 @@ internal sealed partial class MainWindowVM : ViewModelBase, IDisposable
 		NavigationPageToItemContentMapForSearch[Atlas.GetStr("ConfigurePolicyRuleOptionsNavItem/Content")] = typeof(Pages.ConfigurePolicyRuleOptions);
 		NavigationPageToItemContentMapForSearch[Atlas.GetStr("LogsNavItem/Content")] = typeof(Pages.Logs);
 		NavigationPageToItemContentMapForSearch[Atlas.GetStr("SimulationNavItem/Content")] = typeof(Pages.Simulation);
+		NavigationPageToItemContentMapForSearch[Atlas.GetStr("AppLockerSimulationNavItem/Content")] = typeof(Pages.AppLockerSimulation);
+		NavigationPageToItemContentMapForSearch[Atlas.GetStr("AppLockerPolicyEditorNavItem/Content")] = typeof(Pages.AppLockerPolicyEditor);
+		NavigationPageToItemContentMapForSearch[Atlas.GetStr("AppLockerCompareNavItem/Content")] = typeof(Pages.AppLockerCompare);
+		NavigationPageToItemContentMapForSearch[Atlas.GetStr("AppLockerToWDACNavItem/Content")] = typeof(Pages.AppLockerToWDAC);
 		NavigationPageToItemContentMapForSearch[Atlas.GetStr("DeploymentNavItem/Content")] = typeof(Pages.DeploymentPage);
 		NavigationPageToItemContentMapForSearch[Atlas.GetStr("MergePoliciesNavItem/Content")] = typeof(Pages.MergePolicies);
 		NavigationPageToItemContentMapForSearch[Atlas.GetStr("ComparePoliciesNavItem/Content")] = typeof(Pages.ComparePolicies);
@@ -962,6 +998,21 @@ internal sealed partial class MainWindowVM : ViewModelBase, IDisposable
 	internal IconElement? SimulationIcon { get; set => SP(ref field, value); }
 
 	/// <summary>
+	/// Icon for the AppLocker Simulation navigation item.
+	/// </summary>
+	internal IconElement? AppLockerSimulationIcon { get; set => SP(ref field, value); }
+
+	/// <summary>
+	/// Icon for the AppLocker Policy Editor navigation item.
+	/// </summary>
+	internal IconElement? AppLockerPolicyEditorIcon { get; set => SP(ref field, value); }
+
+	/// <summary>
+	/// Icon for the AppLocker Compare navigation item.
+	/// </summary>
+	internal IconElement? AppLockerCompareIcon { get; set => SP(ref field, value); }
+
+	/// <summary>
 	/// Icon for the System Information navigation item.
 	/// </summary>
 	internal IconElement? SystemInformationIcon { get; set => SP(ref field, value); }
@@ -1223,6 +1274,12 @@ internal sealed partial class MainWindowVM : ViewModelBase, IDisposable
 						Source = new Simulation()
 					};
 
+					AppLockerSimulationIcon = new FontIcon { Glyph = "\uE72E" };
+					AppLockerPolicyEditorIcon = new FontIcon { Glyph = "\uE8A5" };
+					AppLockerCompareIcon = new FontIcon { Glyph = "\uE8AB" };
+
+
+
 					AllowNewAppsIcon = currentTheme == ElementTheme.Dark
 						? new AnimatedIcon
 						{
@@ -1386,6 +1443,24 @@ internal sealed partial class MainWindowVM : ViewModelBase, IDisposable
 						Foreground = accentBrush
 					};
 
+					AppLockerSimulationIcon = new FontIcon
+					{
+						Glyph = "\uE72E",
+						Foreground = accentBrush
+					};
+					AppLockerPolicyEditorIcon = new FontIcon
+					{
+						Glyph = "\uE8A5",
+						Foreground = accentBrush
+					};
+					AppLockerCompareIcon = new FontIcon
+					{
+						Glyph = "\uE8AB",
+						Foreground = accentBrush
+					};
+
+
+
 					AllowNewAppsIcon = new FontIcon
 					{
 						Glyph = "\uED35",
@@ -1515,6 +1590,11 @@ internal sealed partial class MainWindowVM : ViewModelBase, IDisposable
 					SystemInformationIcon = new FontIcon { Glyph = "\uE7C1" };
 					ConfigurePolicyRuleOptionsIcon = new FontIcon { Glyph = "\uEEA3" };
 					SimulationIcon = new FontIcon { Glyph = "\uE835" };
+					AppLockerSimulationIcon = new FontIcon { Glyph = "\uE72E" };
+					AppLockerPolicyEditorIcon = new FontIcon { Glyph = "\uE8A5" };
+					AppLockerCompareIcon = new FontIcon { Glyph = "\uE8AB" };
+
+
 					AllowNewAppsIcon = new FontIcon { Glyph = "\uED35" };
 					CreatePolicyFromEventLogsIcon = new FontIcon { Glyph = "\uEA18" };
 					CreatePolicyFromMDEAHIcon = new FontIcon { Glyph = "\uEB44" };

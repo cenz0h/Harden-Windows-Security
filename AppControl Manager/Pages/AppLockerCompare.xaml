@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="AppControlManager.Pages.AppLockerCompare"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:customUI="using:AppControlManager.CustomUIElements"
+    xmlns:CCToolKit="using:CommonCore.ToolKits"
+    xmlns:applocker="using:AppControlManager.AppLockerPolicy">
+
+    <Grid Margin="15" RowSpacing="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <CCToolKit:WrapPanel Grid.Row="0" HorizontalAlignment="Center" HorizontalSpacing="15" VerticalSpacing="10">
+            <customUI:InfoBarV2 IsOpen="{x:Bind ViewModel.MainInfoBar.IsOpen, Mode=TwoWay}"
+                                IsClosable="{x:Bind ViewModel.MainInfoBar.IsClosable, Mode=OneWay}"
+                                Message="{x:Bind ViewModel.MainInfoBar.Message, Mode=OneWay}"
+                                Severity="{x:Bind ViewModel.MainInfoBar.Severity, Mode=OneWay}"
+                                Title="{x:Bind ViewModel.MainInfoBar.Title, Mode=OneWay}"
+                                IsIconVisible="True" />
+            <ProgressRing IsIndeterminate="True" Visibility="{x:Bind ViewModel.ProgressRingVisibility, Mode=OneWay}" />
+        </CCToolKit:WrapPanel>
+
+        <StackPanel Grid.Row="1" Spacing="8" Margin="0,6,0,0">
+            <TextBlock Text="Compare AppLocker policies" Style="{StaticResource TitleTextBlockStyle}" />
+            <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                       Text="Pick a reference policy and a comparison policy. Rules are matched by meaning (collection, kind, action, SID and conditions) - not by GUID - so equivalent rules match and duplicates collapse. + = only in comparison, - = only in reference, ~ = matched rule whose exceptions differ." />
+            <CCToolKit:WrapPanel Orientation="Horizontal" HorizontalSpacing="10" VerticalSpacing="10">
+                <Button Content="Reference policy..." Click="{x:Bind ViewModel.BrowseReference}" />
+                <Button Content="Comparison policy..." Click="{x:Bind ViewModel.BrowseComparison}" />
+                <Button Content="Compare" Style="{StaticResource AccentButtonStyle}" Click="{x:Bind ViewModel.CompareButton_Click}" />
+                <Button Content="Clear" Click="{x:Bind ViewModel.ClearResults}" />
+                <ToggleSwitch MinWidth="0" OnContent="Hide unchanged" OffContent="Show all"
+                              IsOn="{x:Bind ViewModel.HideUnchanged, Mode=TwoWay}" VerticalAlignment="Center" />
+            </CCToolKit:WrapPanel>
+            <TextBlock FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap">
+                <Run Text="Reference:" FontWeight="SemiBold" /><Run Text="{x:Bind ViewModel.ReferencePath, Mode=OneWay}" />
+            </TextBlock>
+            <TextBlock FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap">
+                <Run Text="Comparison:" FontWeight="SemiBold" /><Run Text="{x:Bind ViewModel.ComparisonPath, Mode=OneWay}" />
+            </TextBlock>
+        </StackPanel>
+
+        <TextBlock Grid.Row="2" FontWeight="SemiBold" Text="{x:Bind ViewModel.SummaryText, Mode=OneWay}" />
+
+        <ListView Grid.Row="3" ItemsSource="{x:Bind ViewModel.Results, Mode=OneWay}"
+                  BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="applocker:AppLockerDiffEntry">
+                    <Grid Padding="4,4" ColumnSpacing="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Colored status glyph (one visible) -->
+                        <Grid Grid.Column="0" VerticalAlignment="Top" Width="18">
+                            <TextBlock Text="+" FontWeight="Bold" Foreground="{ThemeResource SystemFillColorSuccessBrush}"
+                                       Visibility="{x:Bind AddedVisibility}" />
+                            <TextBlock Text="&#x2212;" FontWeight="Bold" Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                                       Visibility="{x:Bind RemovedVisibility}" />
+                            <TextBlock Text="~" FontWeight="Bold" Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                                       Visibility="{x:Bind ChangedVisibility}" />
+                            <TextBlock Text="=" Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                       Visibility="{x:Bind UnchangedVisibility}" />
+                        </Grid>
+
+                        <StackPanel Grid.Column="1">
+                            <TextBlock>
+                                <Run Text="{x:Bind Collection}" FontWeight="SemiBold" />
+                                <Run Text="{x:Bind Kind}" />
+                                <Run Text="{x:Bind Action}" />
+                                <Run Text="  SID:" Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+                                <Run Text="{x:Bind UserOrGroupSid}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+                            </TextBlock>
+                            <TextBlock Text="{x:Bind ConditionSummary}" FontSize="12" TextWrapping="Wrap"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                            <ItemsControl ItemsSource="{x:Bind ExceptionDiffs}" Visibility="{x:Bind ExceptionsVisibility}" Margin="12,2,0,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="applocker:AppLockerExceptionDiff">
+                                        <TextBlock FontSize="12">
+                                            <Run Text="{x:Bind Glyph}" FontWeight="Bold" />
+                                            <Run Text=" exception: " Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+                                            <Run Text="{x:Bind Summary}" />
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Page>

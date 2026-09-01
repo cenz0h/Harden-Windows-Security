@@ -7819,4 +7819,154 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   <data name="NoAppManifestsSelectedWarning" xml:space="preserve">
     <value>No App Manifests selected.</value>
   </data>
+  <data name="AppLockerSimulationNavItem.Content" xml:space="preserve">
+    <value>AppLocker Simulation</value>
+  </data>
+  <data name="AppLockerSimulationPageTitle" xml:space="preserve">
+    <value>Simulate an AppLocker policy against files and folders to see whether they would be allowed or blocked, without deploying it.</value>
+  </data>
+  <data name="AppLockerLoadingPolicyMsg" xml:space="preserve">
+    <value>Loading and validating the AppLocker policy...</value>
+  </data>
+  <data name="AppLockerPolicyLoadedMsg" xml:space="preserve">
+    <value>Loaded AppLocker policy: {0} rules across {1} rule collections.</value>
+  </data>
+  <data name="AppLockerSelectPolicyFirstMsg" xml:space="preserve">
+    <value>Select an AppLocker policy XML file first.</value>
+  </data>
+  <data name="AppLockerSelectFilesFirstMsg" xml:space="preserve">
+    <value>Select at least one file or folder to test.</value>
+  </data>
+  <data name="AppLockerRunningSimulationMsg" xml:space="preserve">
+    <value>Running AppLocker simulation...</value>
+  </data>
+  <data name="AppLockerSimulationSummary" xml:space="preserve">
+    <value>{0} files tested - {1} allowed, {2} blocked, {3} not applicable, {4} not processed.</value>
+  </data>
+  <data name="AppLockerNoResultsToExportMsg" xml:space="preserve">
+    <value>There are no results to export.</value>
+  </data>
+  <data name="AppLockerExportedResultsMsg" xml:space="preserve">
+    <value>Exported {0} results to {1}</value>
+  </data>
+  <data name="AppLockerNotGovernedReason" xml:space="preserve">
+    <value>AppLocker does not govern this file type.</value>
+  </data>
+  <data name="AppLockerCollectionNotEnforcedReason" xml:space="preserve">
+    <value>The rule collection for this file type is not enforced.</value>
+  </data>
+  <data name="AppLockerDeniedByRuleReason" xml:space="preserve">
+    <value>Blocked by a Deny rule.</value>
+  </data>
+  <data name="AppLockerAllowedByRuleReason" xml:space="preserve">
+    <value>Allowed by a matching rule.</value>
+  </data>
+  <data name="AppLockerAuditOnlyReason" xml:space="preserve">
+    <value>Would be allowed; the collection is in Audit only mode.</value>
+  </data>
+  <data name="AppLockerAuditOnlyDefaultReason" xml:space="preserve">
+    <value>No rule matched; the collection is in Audit only mode so the file runs but would be logged.</value>
+  </data>
+  <data name="AppLockerDefaultDenyReason" xml:space="preserve">
+    <value>Blocked: the collection is enforced and no rule allows this file (default deny).</value>
+  </data>
+  <data name="AppLockerMissingRootValidationError" xml:space="preserve">
+    <value>The AppLocker XML file has no root element.</value>
+  </data>
+  <data name="NotAnAppLockerPolicyValidationError" xml:space="preserve">
+    <value>The selected file is not an AppLocker policy (its root element is not AppLockerPolicy).</value>
+  </data>
+  <data name="AppLockerFileInaccessibleReason" xml:space="preserve">
+    <value>Not processed - the file could not be read: {0}</value>
+  </data>
+  <data name="AppLockerPolicyEditorNavItem.Content" xml:space="preserve">
+    <value>AppLocker Editor</value>
+  </data>
+  <data name="AppLockerPolicyEditorPageTitle" xml:space="preserve">
+    <value>Open, view, edit and save an AppLocker policy XML file. Deployment is done separately via Group Policy, Set-AppLockerPolicy or Intune.</value>
+  </data>
+  <data name="AppLockerEditorStatus" xml:space="preserve">
+    <value>Showing {0} of {1} rules</value>
+  </data>
+  <data name="AppLockerHashCountSummary" xml:space="preserve">
+    <value>{0} file hash(es)</value>
+  </data>
+  <data name="AppLockerNewRuleName" xml:space="preserve">
+    <value>New rule</value>
+  </data>
+  <data name="AppLockerLoadPolicyBeforeAddMsg" xml:space="preserve">
+    <value>Open an AppLocker policy first, then add rules to it.</value>
+  </data>
+  <data name="AppLockerNothingToSaveMsg" xml:space="preserve">
+    <value>There is no loaded policy to save.</value>
+  </data>
+  <data name="AppLockerSavedPolicyMsg" xml:space="preserve">
+    <value>Saved AppLocker policy to {0}</value>
+  </data>
+  <data name="AppLockerNoTemplatesSelectedMsg" xml:space="preserve">
+    <value>Select one or more templates first.</value>
+  </data>
+  <data name="AppLockerTemplatesAddedMsg" xml:space="preserve">
+    <value>Added {0} rule(s) as {1}. Review them and Save the policy.</value>
+  </data>
+  <data name="AppLockerExceptionsBadge" xml:space="preserve">
+    <value>{0} exception(s)</value>
+  </data>
+  <data name="AppLockerSelectRuleForSidMsg" xml:space="preserve">
+    <value>Select a rule first, then choose a SID to apply.</value>
+  </data>
+  <data name="AppLockerSidUnresolved" xml:space="preserve">
+    <value>(valid SID, not resolvable on this machine)</value>
+  </data>
+  <data name="AppLockerSidInvalid" xml:space="preserve">
+    <value>(not a valid SID)</value>
+  </data>
+  <data name="AppLockerCompareNavItem.Content" xml:space="preserve">
+    <value>AppLocker Compare</value>
+  </data>
+  <data name="AppLockerComparePageTitle" xml:space="preserve">
+    <value>Compare two AppLocker policies. The first is the reference; differences in the second are shown as + (added), - (removed) or ~ (exceptions changed).</value>
+  </data>
+  <data name="AppLockerToWDACNavItem.Content" xml:space="preserve">
+    <value>AppLocker to App Control</value>
+  </data>
+  <data name="AppLockerToWDACPageTitle" xml:space="preserve">
+    <value>Migrate an existing AppLocker policy into a clean App Control (WDAC) base policy plus a supplemental policy holding the converted rules.</value>
+  </data>
+  <data name="AppLockerToWDACSelectPolicyFirstMsg" xml:space="preserve">
+    <value>Select an AppLocker policy XML file first.</value>
+  </data>
+  <data name="AppLockerToWDACSelectBaseFirstMsg" xml:space="preserve">
+    <value>Select an existing base policy XML file, or choose a base policy to generate.</value>
+  </data>
+  <data name="AppLockerToWDACSelectScanFoldersMsg" xml:space="preserve">
+    <value>Select at least one folder to scan, or turn off the file re-scan option.</value>
+  </data>
+  <data name="AppLockerToWDACConvertingMsg" xml:space="preserve">
+    <value>Converting the AppLocker policy to App Control policies...</value>
+  </data>
+  <data name="AppLockerToWDACSummary" xml:space="preserve">
+    <value>Converted {0}, degraded {1}, deferred {2}, dropped {3}. Exceptions skipped: {4}. Non-Everyone-scoped rules: {5}.</value>
+  </data>
+  <data name="AppLockerToWDACScanSummary" xml:space="preserve">
+    <value> File re-scan: {0} of {1} allowed files produced faithful signer/hash rules.</value>
+  </data>
+  <data name="AppLockerSelectBothPoliciesMsg" xml:space="preserve">
+    <value>Select both a reference and a comparison policy first.</value>
+  </data>
+  <data name="AppLockerComparingMsg" xml:space="preserve">
+    <value>Comparing policies...</value>
+  </data>
+  <data name="AppLockerCompareSummary" xml:space="preserve">
+    <value>{0} added, {1} removed, {2} changed, {3} unchanged.</value>
+  </data>
+  <data name="AppLockerReadingAppInfoMsg" xml:space="preserve">
+    <value>Reading application information...</value>
+  </data>
+  <data name="AppLockerRulesFromAppsMsg" xml:space="preserve">
+    <value>Added {0} rule(s) from apps ({1} skipped). Review and Save.</value>
+  </data>
+  <data name="AppLockerSavedButInvalidMsg" xml:space="preserve">
+    <value>Saved to {0}, but it failed AppLocker schema validation and may not import: {1}</value>
+  </data>
 </root>

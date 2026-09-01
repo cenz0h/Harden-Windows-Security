@@ -350,6 +350,9 @@
         <Content Include="XSDSchemas\cipolicy.xsd">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <Content Include="XSDSchemas\AppLockerPolicy.xsd">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
         <Content Include="XSDSchemas\LICENSE">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
@@ -366,5 +369,19 @@
 
     <!-- Imports the Common Core -->
     <Import Project="eXclude\CommonCore\CommonCore.projitems" Label="Shared" />
+
+    <!--
+      Copy the package logo/tile assets into the build output so a dev "Add-AppxPackage -Register"
+      of the loose layout shows the proper taskbar/Start icon (a plain 'dotnet build' does not run
+      the MSIX packaging step that normally lays these out).
+    -->
+    <Target Name="CopyAssetsForDevRegistration" AfterTargets="Build">
+        <ItemGroup>
+            <_AppLockerPackageAssets Include="$(MSBuildProjectDirectory)\Assets\**\*.*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(_AppLockerPackageAssets)"
+              DestinationFiles="@(_AppLockerPackageAssets->'$(OutDir)Assets\%(RecursiveDir)%(Filename)%(Extension)')"
+              SkipUnchangedFiles="true" />
+    </Target>
 
 </Project>

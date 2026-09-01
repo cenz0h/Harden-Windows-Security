@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Pragmatic structural schema for AppLocker policy XML used by AppControl Manager's
+  AppLocker features. It validates the document structure and the well-known
+  enumerations (RuleCollection Type, EnforcementMode, rule Action) without attempting
+  to reproduce every constraint of Microsoft's internal AppLocker grammar. AppLocker
+  policy XML has no target namespace.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified">
+
+  <xs:simpleType name="RuleCollectionTypeEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Appx" />
+      <xs:enumeration value="Dll" />
+      <xs:enumeration value="Exe" />
+      <xs:enumeration value="Msi" />
+      <xs:enumeration value="Script" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="EnforcementModeEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NotConfigured" />
+      <xs:enumeration value="Enabled" />
+      <xs:enumeration value="AuditOnly" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ActionEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Allow" />
+      <xs:enumeration value="Deny" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Condition elements -->
+  <xs:complexType name="FilePublisherConditionType">
+    <xs:sequence>
+      <xs:element name="BinaryVersionRange" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:attribute name="LowSection" type="xs:string" use="required" />
+          <xs:attribute name="HighSection" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="PublisherName" type="xs:string" use="required" />
+    <xs:attribute name="ProductName" type="xs:string" use="required" />
+    <xs:attribute name="BinaryName" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="FilePathConditionType">
+    <xs:attribute name="Path" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="FileHashConditionType">
+    <xs:sequence>
+      <xs:element name="FileHash" minOccurs="1" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="Type" type="xs:string" use="required" />
+          <xs:attribute name="Data" type="xs:string" use="required" />
+          <xs:attribute name="SourceFileName" type="xs:string" use="required" />
+          <xs:attribute name="SourceFileLength" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- A Conditions/Exceptions container may hold any mix of condition kinds. -->
+  <xs:group name="ConditionChoice">
+    <xs:choice>
+      <xs:element name="FilePublisherCondition" type="FilePublisherConditionType" />
+      <xs:element name="FilePathCondition" type="FilePathConditionType" />
+      <xs:element name="FileHashCondition" type="FileHashConditionType" />
+    </xs:choice>
+  </xs:group>
+
+  <!-- Exceptions may contain any number of conditions of any kind. -->
+  <xs:complexType name="ExceptionsContainerType">
+    <xs:sequence>
+      <xs:group ref="ConditionChoice" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Conditions must contain EXACTLY ONE condition. AppLocker permits only a single condition
+       per rule; multiple targets are expressed as separate rules (or, for hashes, multiple
+       FileHash entries inside the single FileHashCondition). -->
+  <xs:complexType name="SingleConditionType">
+    <xs:sequence>
+      <xs:group ref="ConditionChoice" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Common rule shape (all three rule kinds share the same attributes/children). -->
+  <xs:complexType name="RuleType">
+    <xs:sequence>
+      <xs:element name="Conditions" type="SingleConditionType" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Exceptions" type="ExceptionsContainerType" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="Id" type="xs:string" use="required" />
+    <xs:attribute name="Name" type="xs:string" use="required" />
+    <xs:attribute name="Description" type="xs:string" use="optional" />
+    <xs:attribute name="UserOrGroupSid" type="xs:string" use="required" />
+    <xs:attribute name="Action" type="ActionEnum" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="RuleCollectionType">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="FilePublisherRule" type="RuleType" />
+      <xs:element name="FilePathRule" type="RuleType" />
+      <xs:element name="FileHashRule" type="RuleType" />
+    </xs:choice>
+    <xs:attribute name="Type" type="RuleCollectionTypeEnum" use="required" />
+    <xs:attribute name="EnforcementMode" type="EnforcementModeEnum" use="optional" />
+  </xs:complexType>
+
+  <xs:element name="AppLockerPolicy">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RuleCollection" type="RuleCollectionType" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+      <xs:attribute name="Version" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>
