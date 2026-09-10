@@ -155,6 +155,50 @@ internal sealed class FileIdentity
 	[JsonIgnore]
 	internal string? FileVersion_String { get; private set; }
 
+	/// <summary>
+	/// Optional UPPER bound for the version range of a generated publisher rule.
+	/// When this is null (the default for a freshly scanned file), the rule is emitted with only a
+	/// MinimumFileVersion, which means "<see cref="FileVersion"/> and anything newer". Setting this
+	/// (via the rule editor, before the policy is built) pins the rule to an exact version or a
+	/// closed range by also emitting MaximumFileVersion.
+	/// </summary>
+	[JsonInclude]
+	internal Version? MaxFileVersion
+	{
+		get; set
+		{
+			field = value;
+			MaxFileVersion_String = field?.ToString();
+		}
+	}
+
+	[JsonIgnore]
+	internal string? MaxFileVersion_String { get; private set; }
+
+	/// <summary>
+	/// Human readable version constraint for the scan results grid, so the effective rule range is
+	/// visible before the policy is created.
+	/// </summary>
+	[JsonIgnore]
+	internal string FileVersionDisplay
+	{
+		get
+		{
+			if (FileVersion is null && MaxFileVersion is null)
+				return string.Empty;
+
+			if (MaxFileVersion is null)
+				return $"{FileVersion} and above";
+
+			if (FileVersion is null)
+				return $"up to {MaxFileVersion}";
+
+			return FileVersion.Equals(MaxFileVersion)
+				? $"{FileVersion} only"
+				: $"{FileVersion} - {MaxFileVersion}";
+		}
+	}
+
 	[JsonInclude]
 	internal string? PackageFamilyName { get; set; }
 

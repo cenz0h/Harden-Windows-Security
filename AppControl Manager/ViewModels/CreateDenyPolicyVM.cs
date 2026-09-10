@@ -1290,6 +1290,40 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase, IDisposable
 
 	#endregion
 
+	/// <summary>
+	/// Opens the publisher rule editor for the currently selected scan result rows, so the version
+	/// range (and, for a single row, the matched file attributes) can be adjusted BEFORE the policy
+	/// is generated. Without this, every scanned file yields a "this version and above" rule.
+	/// </summary>
+	internal async void EditPublisherRuleForSelection_FilesAndFolders()
+	{
+		try
+		{
+			List<FileIdentity> selected = LVController.GetSelectedFileIdentities();
+
+			if (selected.Count is 0)
+			{
+				FilesAndFoldersInfoBar.WriteWarning(Atlas.GetStr("SelectRowsToEditRuleMsg"));
+				return;
+			}
+
+			using FilePublisherRuleEditorDialog dialog = new(selected);
+
+			if (await dialog.ShowAsync() is ContentDialogResult.Primary)
+			{
+				// FileIdentity intentionally doesn't implement INotifyPropertyChanged (it's a hot path
+				// model), so re-run the active search to rebuild the rows and surface the edited values.
+				LVController.ApplySearch(FilesAndFoldersScanResultsSearchTextBox);
+
+				FilesAndFoldersInfoBar.WriteSuccess(string.Format(Atlas.GetStr("RuleEditAppliedMsg"), selected.Count));
+			}
+		}
+		catch (Exception ex)
+		{
+			FilesAndFoldersInfoBar.WriteError(ex);
+		}
+	}
+
 	internal void _OpenInFileExplorer() => OpenInFileExplorer(ListViewHelper.ListViewsRegistry.DenyPolicy_FilesAndFolders_ScanResults);
 	internal void _OpenInFileExplorerShortCut(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
 	{

@@ -90,7 +90,11 @@ internal static class NewWHQLFilePublisherLevelRules
 			FileAttrib newFileAttrib = new(id: FileAttribID)
 			{
 				FriendlyName = Atlas.GetStr("WHQLFilePublisherRuleTypeFriendlyName"),
-				MinimumFileVersion = whqlFilePublisherData.FileVersion?.ToString()
+				MinimumFileVersion = whqlFilePublisherData.FileVersion?.ToString(),
+
+				// Only emitted when the user pinned an upper bound in the rule editor; otherwise the
+				// rule remains "MinimumFileVersion and above".
+				MaximumFileVersion = whqlFilePublisherData.MaxFileVersion?.ToString()
 			};
 
 			if (!string.IsNullOrWhiteSpace(whqlFilePublisherData.OriginalFileName))
@@ -214,7 +218,11 @@ internal static class NewWHQLFilePublisherLevelRules
 			FileAttrib newFileAttrib = new(id: FileAttribID)
 			{
 				FriendlyName = Atlas.GetStr("WHQLFilePublisherRuleTypeFriendlyName"),
-				MinimumFileVersion = whqlFilePublisherData.FileVersion?.ToString()
+				MinimumFileVersion = whqlFilePublisherData.FileVersion?.ToString(),
+
+				// Only emitted when the user pinned an upper bound in the rule editor; otherwise the
+				// rule remains "MinimumFileVersion and above".
+				MaximumFileVersion = whqlFilePublisherData.MaxFileVersion?.ToString()
 			};
 
 			if (!string.IsNullOrWhiteSpace(whqlFilePublisherData.OriginalFileName))

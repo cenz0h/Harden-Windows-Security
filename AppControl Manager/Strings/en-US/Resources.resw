@@ -895,6 +895,15 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   <data name="RuleOptionsAppliedSuccessMsg" xml:space="preserve">
     <value>Policy rule options were applied and saved successfully.</value>
   </data>
+  <data name="SelectRowsToEditRuleMsg" xml:space="preserve">
+    <value>Select one or more rows first, then choose Edit publisher rule.</value>
+  </data>
+  <data name="RuleEditAppliedMsg" xml:space="preserve">
+    <value>Rule settings applied to {0} file(s). They will be used when the policy is created.</value>
+  </data>
+  <data name="EditPublisherRuleMenuItem.Text" xml:space="preserve">
+    <value>Edit publisher rule...</value>
+  </data>
   <data name="RuleOptionsDroppedSupplementalMsg" xml:space="preserve">
     <value>Applied and saved, but these options were not set because they don't apply to a Supplemental policy: {0}. Options like Audit Mode belong on the base policy - a supplemental inherits enforcement/audit from its base. Load the base policy to change them.</value>
   </data>

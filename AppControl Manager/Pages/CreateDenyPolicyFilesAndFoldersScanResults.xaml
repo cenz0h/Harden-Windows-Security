@@ -221,6 +221,14 @@
                         <Grid.ContextFlyout>
                             <MenuFlyout>
 
+                                <MenuFlyoutItem x:Uid="EditPublisherRuleMenuItem" Click="{x:Bind VMs:ViewModelProvider.CreateDenyPolicyVM.EditPublisherRuleForSelection_FilesAndFolders}">
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon Glyph="&#xE70F;" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+
+                                <MenuFlyoutSeparator />
+
                                 <MenuFlyoutItem x:Uid="OpenInFileExplorer" Click="{x:Bind VMs:ViewModelProvider.CreateDenyPolicyVM._OpenInFileExplorer}">
                                     <MenuFlyoutItem.KeyboardAccelerators>
                                         <KeyboardAccelerator Key="O" Modifiers="Control" Invoked="{x:Bind VMs:ViewModelProvider.CreateDenyPolicyVM._OpenInFileExplorerShortCut}"/>
@@ -386,7 +394,7 @@
                         <TextBlock Text="{x:Bind InternalName}" Style="{StaticResource ListViewCellTextBlock}" FontFamily="{x:Bind VMs:ViewModelProvider.CreateDenyPolicyVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Grid.Column="3"/>
                         <TextBlock x:Phase="1" Text="{x:Bind FileDescription}" Style="{StaticResource ListViewCellTextBlock}" FontFamily="{x:Bind VMs:ViewModelProvider.CreateDenyPolicyVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Grid.Column="4"/>
                         <TextBlock x:Phase="1" Text="{x:Bind ProductName}" Style="{StaticResource ListViewCellTextBlock}" FontFamily="{x:Bind VMs:ViewModelProvider.CreateDenyPolicyVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Grid.Column="5"/>
-                        <TextBlock x:Phase="2" Text="{x:Bind FileVersion_String}" Style="{StaticResource ListViewCellTextBlock}" FontFamily="{x:Bind VMs:ViewModelProvider.CreateDenyPolicyVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Grid.Column="6"/>
+                        <TextBlock x:Phase="2" Text="{x:Bind FileVersionDisplay}" Style="{StaticResource ListViewCellTextBlock}" FontFamily="{x:Bind VMs:ViewModelProvider.CreateDenyPolicyVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Grid.Column="6"/>
                         <TextBlock x:Phase="2" Text="{x:Bind PackageFamilyName}" Style="{StaticResource ListViewCellTextBlock}" FontFamily="{x:Bind VMs:ViewModelProvider.CreateDenyPolicyVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Grid.Column="7"/>
                         <TextBlock x:Phase="4" Text="{x:Bind SHA256Hash}" Style="{StaticResource ListViewCellTextBlock}" FontFamily="{x:Bind VMs:ViewModelProvider.CreateDenyPolicyVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Grid.Column="8"/>
                         <TextBlock x:Phase="4" Text="{x:Bind SHA1Hash}" Style="{StaticResource ListViewCellTextBlock}" FontFamily="{x:Bind VMs:ViewModelProvider.CreateDenyPolicyVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Grid.Column="9"/>

@@ -65,7 +65,11 @@ internal static class NewFilePublisherLevelRules
 			FileAttrib newFileAttrib = new(id: FileAttribID)
 			{
 				FriendlyName = Atlas.GetStr("FilePublisherRuleTypeFriendlyName"),
-				MinimumFileVersion = filePublisherData.FileVersion?.ToString()
+				MinimumFileVersion = filePublisherData.FileVersion?.ToString(),
+
+				// Only emitted when the user pinned an upper bound in the rule editor; otherwise the
+				// rule remains "MinimumFileVersion and above".
+				MaximumFileVersion = filePublisherData.MaxFileVersion?.ToString()
 			};
 
 			if (!string.IsNullOrWhiteSpace(filePublisherData.OriginalFileName))
@@ -172,7 +176,11 @@ internal static class NewFilePublisherLevelRules
 			FileAttrib newFileAttrib = new(id: FileAttribID)
 			{
 				FriendlyName = Atlas.GetStr("FilePublisherRuleTypeFriendlyName"),
-				MinimumFileVersion = filePublisherData.FileVersion?.ToString()
+				MinimumFileVersion = filePublisherData.FileVersion?.ToString(),
+
+				// Only emitted when the user pinned an upper bound in the rule editor; otherwise the
+				// rule remains "MinimumFileVersion and above".
+				MaximumFileVersion = filePublisherData.MaxFileVersion?.ToString()
 			};
 
 			if (!string.IsNullOrWhiteSpace(filePublisherData.OriginalFileName))

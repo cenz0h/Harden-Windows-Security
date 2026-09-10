@@ -366,7 +366,8 @@ internal static class SignerAndHashBuilder
 				authenticodeSHA1: signedData.SHA1Hash,
 				siSigningScenario: signedData.SISigningScenario,
 				packageFamilyName: signedData.PackageFamilyName,
-				certificateDetails: []
+				certificateDetails: [],
+				maxFileVersion: signedData.MaxFileVersion
 				);
 
 			// Loop through each correlated event and process the certificate details
@@ -433,7 +434,8 @@ internal static class SignerAndHashBuilder
 				authenticodeSHA1: signedData.SHA1Hash,
 				siSigningScenario: signedData.SISigningScenario,
 				packageFamilyName: signedData.PackageFamilyName,
-				certificateDetails: []
+				certificateDetails: [],
+				maxFileVersion: signedData.MaxFileVersion
 				);
 
 			// Loop through each correlated event and process the certificate details

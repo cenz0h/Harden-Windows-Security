@@ -43,10 +43,16 @@ internal sealed class FilePublisherSignerCreator(
 	string? productName,
 	string? authenticodeSHA256,
 	string? authenticodeSHA1,
-	SSType siSigningScenario)
+	SSType siSigningScenario,
+	Version? maxFileVersion = null)
 {
 	internal List<CertificateDetailsCreator> CertificateDetails => certificateDetails;
 	internal Version? FileVersion => fileVersion;
+
+	/// <summary>
+	/// Optional upper bound. Null means the rule stays "FileVersion and above".
+	/// </summary>
+	internal Version? MaxFileVersion => maxFileVersion;
 	internal string? FileDescription => fileDescription;
 	internal string? InternalName => internalName;
 	internal string? OriginalFileName => originalFileName;

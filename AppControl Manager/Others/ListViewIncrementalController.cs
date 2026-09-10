@@ -66,6 +66,26 @@ internal sealed partial class ListViewIncrementalController(
 	internal void DeSelectAll_Click() => ListViewRef?.SelectedItems.Clear();
 
 	/// <summary>
+	/// The rows currently selected in the ListView. Used by the publisher rule editor so edits can be
+	/// applied to one row or to a whole multi-selection before the policy is generated.
+	/// </summary>
+	internal List<FileIdentity> GetSelectedFileIdentities()
+	{
+		List<FileIdentity> selected = [];
+
+		if (ListViewRef is null)
+			return selected;
+
+		foreach (object item in ListViewRef.SelectedItems)
+		{
+			if (item is FileIdentity fileIdentity)
+				selected.Add(fileIdentity);
+		}
+
+		return selected;
+	}
+
+	/// <summary>
 	/// Selects all of the displayed rows on the ListView
 	/// </summary>
 	internal void SelectAll_Click() => ListViewHelper.SelectAll(ListViewRef);
