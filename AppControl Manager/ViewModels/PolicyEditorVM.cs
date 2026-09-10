@@ -1607,7 +1607,7 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 				};
 
 				if (element is not null)
-					pairs.Add((row, new PolicyElementEditTarget(element)));
+					pairs.Add((row, new PolicyElementEditTarget(element, ResolvePublisherForElement(element))));
 			}
 
 			if (pairs.Count is 0)
@@ -1634,6 +1634,45 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 		{
 			MainInfoBar.WriteError(ex);
 		}
+	}
+
+	/// <summary>
+	/// Finds the publisher behind a rule element for display in the editor.
+	///
+	/// Only FileAttrib rules (FilePublisher / WHQLFilePublisher) have a publisher: the signer that
+	/// references the FileAttrib by ID carries the certificate details. Hash / file path / file name
+	/// rules have no signer, so this returns null for them.
+	/// </summary>
+	private string? ResolvePublisherForElement(object element)
+	{
+		if (element is not FileAttrib fileAttrib)
+			return null;
+
+		if (SelectedPolicy?.PolicyObj.Signers is null)
+			return null;
+
+		List<string> publisherNames = [];
+
+		foreach (Signer signer in SelectedPolicy.PolicyObj.Signers)
+		{
+			if (signer.FileAttribRef is null)
+				continue;
+
+			bool referencesThisAttrib = signer.FileAttribRef.Any(reference =>
+				string.Equals(reference.RuleID, fileAttrib.ID, StringComparison.OrdinalIgnoreCase));
+
+			if (!referencesThisAttrib)
+				continue;
+
+			// Prefer the leaf certificate's subject (the actual publisher); fall back to the signer name
+			// which holds the issuing/intermediate certificate.
+			string? name = signer.CertPublisher?.Value ?? signer.Name;
+
+			if (!string.IsNullOrWhiteSpace(name) && !publisherNames.Contains(name, StringComparer.OrdinalIgnoreCase))
+				publisherNames.Add(name);
+		}
+
+		return publisherNames.Count > 0 ? string.Join(", ", publisherNames) : null;
 	}
 
 	/// <summary>

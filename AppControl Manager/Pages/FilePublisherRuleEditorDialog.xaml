@@ -15,6 +15,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Scope / explanation -->
@@ -24,8 +25,20 @@
                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                    Text="{x:Bind ScopeDescription, Mode=OneWay}" />
 
+        <!-- Publisher (read-only: it comes from the signing certificate) -->
+        <StackPanel Grid.Row="1" Spacing="4" Margin="0,0,0,14">
+            <TextBlock Text="Publisher" FontWeight="SemiBold" />
+            <TextBlock TextWrapping="Wrap"
+                       IsTextSelectionEnabled="True"
+                       Text="{x:Bind PublisherDisplay, Mode=OneWay}" />
+            <TextBlock FontSize="12"
+                       TextWrapping="Wrap"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                       Text="Read-only. The publisher is the signing certificate the rule is bound to (matched on its TBS hash), so it can't be typed in - only the attributes below narrow what it matches." />
+        </StackPanel>
+
         <!-- Version range -->
-        <StackPanel Grid.Row="1" Spacing="10" Margin="0,0,0,14">
+        <StackPanel Grid.Row="2" Spacing="10" Margin="0,0,0,14">
 
             <TextBlock Text="File version" FontWeight="SemiBold" />
 
@@ -60,7 +73,7 @@
         </StackPanel>
 
         <!-- File attributes (single-selection only) -->
-        <ContentControl Grid.Row="2" HorizontalContentAlignment="Stretch"
+        <ContentControl Grid.Row="3" HorizontalContentAlignment="Stretch"
                         IsEnabled="{x:Bind AttributesEnabled, Mode=OneWay}">
         <StackPanel Spacing="10">
 
@@ -95,7 +108,7 @@
         </ContentControl>
 
         <!-- Validation message -->
-        <TextBlock Grid.Row="3"
+        <TextBlock Grid.Row="4"
                    Margin="0,12,0,0"
                    TextWrapping="Wrap"
                    Foreground="{ThemeResource SystemFillColorCriticalBrush}"

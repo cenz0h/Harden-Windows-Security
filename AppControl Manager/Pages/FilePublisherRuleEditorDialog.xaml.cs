@@ -17,6 +17,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using AppControlManager.CustomUIElements;
 using AppControlManager.Others;
@@ -100,6 +101,49 @@ internal sealed partial class FilePublisherRuleEditorDialog : ContentDialogV2, I
 
 	/// <summary>File attribute editing only makes sense for one row at a time.</summary>
 	internal bool AttributesEnabled => IsSingle;
+
+	/// <summary>
+	/// The signing certificate behind the rule. Read-only - a publisher is matched by its certificate
+	/// TBS hash, so it can't be retyped here. Shows a summary when several rows are selected.
+	/// </summary>
+	internal string PublisherDisplay
+	{
+		get
+		{
+			if (_targets.Count is 0)
+				return "(none)";
+
+			if (IsSingle)
+				return _targets[0].PublisherDisplay ?? "(unsigned / no publisher on this rule)";
+
+			// Multi-selection: collapse to the distinct publishers across the selection.
+			List<string> distinct = [];
+			bool anyMissing = false;
+
+			foreach (IPublisherRuleEditTarget target in _targets)
+			{
+				string? publisher = target.PublisherDisplay;
+
+				if (string.IsNullOrWhiteSpace(publisher))
+				{
+					anyMissing = true;
+					continue;
+				}
+
+				if (!distinct.Contains(publisher, StringComparer.OrdinalIgnoreCase))
+					distinct.Add(publisher);
+			}
+
+			if (distinct.Count is 0)
+				return "(unsigned / no publisher on the selected rules)";
+
+			string joined = distinct.Count <= 3
+				? string.Join("; ", distinct)
+				: $"{string.Join("; ", distinct.Take(3))} (+{distinct.Count - 3} more)";
+
+			return anyMissing ? $"{joined}; plus rules with no publisher" : joined;
+		}
+	}
 
 	internal int VersionModeIndex
 	{

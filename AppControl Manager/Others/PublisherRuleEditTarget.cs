@@ -37,6 +37,13 @@ internal interface IPublisherRuleEditTarget
 	string? InternalName { get; set; }
 	string? FileDescription { get; set; }
 	string? ProductName { get; set; }
+
+	/// <summary>
+	/// The signing certificate this rule is tied to, for display only. The publisher comes from the
+	/// signer (which is keyed on the certificate's TBS hash) and can't be typed in by hand, so it is
+	/// shown as read-only context for the attributes that CAN be edited.
+	/// </summary>
+	string? PublisherDisplay { get; }
 }
 
 /// <summary>
@@ -52,6 +59,9 @@ internal sealed class FileIdentityEditTarget(FileIdentity item) : IPublisherRule
 	public string? InternalName { get => item.InternalName; set => item.InternalName = value; }
 	public string? FileDescription { get => item.FileDescription; set => item.FileDescription = value; }
 	public string? ProductName { get => item.ProductName; set => item.ProductName = value; }
+
+	/// <summary>The signer CNs gathered during the scan.</summary>
+	public string? PublisherDisplay => string.IsNullOrWhiteSpace(item.FilePublishersToDisplay) ? null : item.FilePublishersToDisplay;
 }
 
 /// <summary>
@@ -65,9 +75,15 @@ internal sealed class FileIdentityEditTarget(FileIdentity item) : IPublisherRule
 /// Note the element's <c>FileName</c> attribute is the file's Original File Name, which is why it maps
 /// onto <see cref="OriginalFileName"/>.
 /// </summary>
-internal sealed class PolicyElementEditTarget(object element) : IPublisherRuleEditTarget
+internal sealed class PolicyElementEditTarget(object element, string? publisherDisplay = null) : IPublisherRuleEditTarget
 {
 	internal object Element => element;
+
+	/// <summary>
+	/// Resolved by the caller from the policy's Signers (the signer that references this FileAttrib).
+	/// Null for hash / file path / file name rules, which have no publisher.
+	/// </summary>
+	public string? PublisherDisplay => publisherDisplay;
 
 	private static Version? Parse(string? value) => Version.TryParse(value, out Version? parsed) ? parsed : null;
 
