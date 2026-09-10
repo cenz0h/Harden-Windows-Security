@@ -87,6 +87,16 @@ internal sealed partial class UpdateVM : ViewModelBase
 	/// </summary>
 	internal async void CheckForUpdateButton_Click()
 	{
+		// This fork suppresses self-update. Blocked here as well as in AppUpdate so that no UI path -
+		// including re-enabling the startup check setting - can replace this build with the upstream
+		// release. See UpdateSuppression.
+		if (UpdateSuppression.UpdatesSuppressed)
+		{
+			Logger.Write(UpdateSuppression.Reason);
+			MainInfoBar.WriteWarning(UpdateSuppression.Reason, Atlas.GetStr("UpdatesSuppressedTitle"));
+			return;
+		}
+
 		try
 		{
 			ElementsAreEnabled = false;

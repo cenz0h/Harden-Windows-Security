@@ -356,6 +356,10 @@ internal sealed partial class Main : ViewModelBase
 
 	/// <summary>
 	/// Automatically check for updates on app startup.
+	///
+	/// Defaults to false in this fork, which pins itself to an older upstream base to keep the
+	/// AppLocker migration tooling working. Note this setting is only cosmetic here: self-update is
+	/// hard-blocked by AppControlManager.Others.UpdateSuppression regardless of what this is set to.
 	/// </summary>
 	internal bool AutoCheckForUpdateAtStartup
 	{
@@ -366,7 +370,7 @@ internal sealed partial class Main : ViewModelBase
 				SaveValue(nameof(AutoCheckForUpdateAtStartup), field);
 			}
 		}
-	} = true;
+	} = false;
 
 	/// <summary>
 	/// Selected language for the application. Empty by default so it will be detected from the system.

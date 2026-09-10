@@ -84,6 +84,13 @@ internal static class AppUpdate
 	/// </summary>
 	internal static UpdateCheckResponse CheckGitHub()
 	{
+		// This fork suppresses self-update - never contact the update endpoint or report an update.
+		if (UpdateSuppression.UpdatesSuppressed)
+		{
+			Logger.Write(UpdateSuppression.Reason);
+			return new UpdateCheckResponse(false, Atlas.currentAppVersion);
+		}
+
 		string versionsResponse = SecHttpClient.Instance.GetStringAsync(Atlas.AppVersionLinkURL).GetAwaiter().GetResult().Trim();
 
 		Version onlineAvailableVersion = new(versionsResponse);
@@ -122,6 +129,13 @@ internal static class AppUpdate
 	/// <returns></returns>
 	internal static async Task<UpdateCheckResponse> CheckStore()
 	{
+		// This fork suppresses self-update - never query the Store for a newer package.
+		if (UpdateSuppression.UpdatesSuppressed)
+		{
+			Logger.Write(UpdateSuppression.Reason);
+			return await Task.FromResult(new UpdateCheckResponse(false, Atlas.currentAppVersion));
+		}
+
 		_StoreContext = StoreContext.GetDefault();
 
 		// Initialize the dialog using wrapper function for IInitializeWithWindow
@@ -166,6 +180,13 @@ internal static class AppUpdate
 	/// </summary>
 	internal static void CheckAtStartup()
 	{
+		// This fork suppresses self-update - see UpdateSuppression for why.
+		if (UpdateSuppression.UpdatesSuppressed)
+		{
+			Logger.Write(UpdateSuppression.Reason);
+			return;
+		}
+
 		_ = Task.Run(async () =>
 		{
 			try

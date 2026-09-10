@@ -907,6 +907,9 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   <data name="PublisherHeader.Text" xml:space="preserve">
     <value>Publisher</value>
   </data>
+  <data name="UpdatesSuppressedTitle" xml:space="preserve">
+    <value>Updates are disabled in this build</value>
+  </data>
   <data name="NoEditableRuleSelectedMsg" xml:space="preserve">
     <value>None of the selected rules expose editable file attributes or a version range.</value>
   </data>
