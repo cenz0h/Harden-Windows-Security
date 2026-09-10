@@ -284,6 +284,7 @@
                                             <ColumnDefinition Width="{x:Bind ViewModel.FileRulesColumnManager.ColumnWidths[14].Width, Mode=TwoWay}" />
                                             <ColumnDefinition Width="{x:Bind ViewModel.FileRulesColumnManager.ColumnWidths[15].Width, Mode=TwoWay}" />
                                             <ColumnDefinition Width="{x:Bind ViewModel.FileRulesColumnManager.ColumnWidths[16].Width, Mode=TwoWay}" />
+                                            <ColumnDefinition Width="{x:Bind ViewModel.FileRulesColumnManager.ColumnWidths[17].Width, Mode=TwoWay}" />
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Header TextBlocks -->
@@ -304,24 +305,26 @@
                                         <TextBlock x:Uid="RequireHotpatchIDHeader" FontFamily="{x:Bind ViewModel.AppSettings.ListViewFontFamily, Mode=OneWay}" Foreground="LightGray" HorizontalAlignment="Stretch" Grid.Column="14" FontWeight="Bold" Margin="10,0,2,0" Padding="5" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[14], Mode=OneWay}"/>
                                         <TextBlock x:Uid="MinimumHotpatchSequenceHeader" FontFamily="{x:Bind ViewModel.AppSettings.ListViewFontFamily, Mode=OneWay}" Foreground="LightGray" HorizontalAlignment="Stretch" Grid.Column="15" FontWeight="Bold" Margin="10,0,2,0" Padding="5" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[15], Mode=OneWay}"/>
                                         <TextBlock x:Uid="MaximumHotpatchSequenceHeader" FontFamily="{x:Bind ViewModel.AppSettings.ListViewFontFamily, Mode=OneWay}" Foreground="LightGray" HorizontalAlignment="Stretch" Grid.Column="16" FontWeight="Bold" Margin="10,0,2,0" Padding="5" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[16], Mode=OneWay}"/>
+                                        <TextBlock x:Uid="PublisherHeader" FontFamily="{x:Bind ViewModel.AppSettings.ListViewFontFamily, Mode=OneWay}" Foreground="LightGray" HorizontalAlignment="Stretch" Grid.Column="17" FontWeight="Bold" Margin="10,0,2,0" Padding="5" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[17], Mode=OneWay}"/>
 
                                         <!-- GridSplitters between columns -->
-                                        <CCToolKit:GridSplitter Grid.Column="1" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[18], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="2" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[19], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="3" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[20], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="4" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[21], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="5" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[22], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="6" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[23], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="7" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[24], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="8" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[25], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="9" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[26], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="10" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[27], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="11" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[28], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="12" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[29], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="13" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[30], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="14" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[31], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="15" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[32], Mode=OneWay}" />
-                                        <CCToolKit:GridSplitter Grid.Column="16" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[33], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="1" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[19], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="2" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[20], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="3" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[21], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="4" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[22], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="5" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[23], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="6" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[24], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="7" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[25], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="8" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[26], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="9" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[27], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="10" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[28], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="11" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[29], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="12" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[30], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="13" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[31], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="14" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[32], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="15" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[33], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="16" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[34], Mode=OneWay}" />
+                                        <CCToolKit:GridSplitter Grid.Column="17" Visibility="{x:Bind ViewModel.FileRulesColumnManager.ColumnVisibilities[35], Mode=OneWay}" />
                                     </Grid>
                                 </Border>
                             </customUI:ListViewV2.Header>
@@ -370,6 +373,7 @@
                                             <ColumnDefinition Width="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.FileRulesColumnManager.ColumnWidths[14].Width, Mode=OneWay}" />
                                             <ColumnDefinition Width="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.FileRulesColumnManager.ColumnWidths[15].Width, Mode=OneWay}" />
                                             <ColumnDefinition Width="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.FileRulesColumnManager.ColumnWidths[16].Width, Mode=OneWay}" />
+                                            <ColumnDefinition Width="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.FileRulesColumnManager.ColumnWidths[17].Width, Mode=OneWay}" />
                                         </Grid.ColumnDefinitions>
                                         <TextBlock IsTextSelectionEnabled="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.TextsAreSelectableToggleState, Mode=OneWay}" FontFamily="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Text="{x:Bind Id}" Style="{StaticResource ListViewCellTextBlock}" Grid.Column="0" Visibility="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.FileRulesColumnManager.ColumnVisibilities[0], Mode=OneWay}"/>
                                         <TextBlock IsTextSelectionEnabled="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.TextsAreSelectableToggleState, Mode=OneWay}" FontFamily="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Text="{x:Bind FriendlyName}" Style="{StaticResource ListViewCellTextBlock}" Grid.Column="1" Visibility="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.FileRulesColumnManager.ColumnVisibilities[1], Mode=OneWay}"/>
@@ -388,6 +392,7 @@
                                         <TextBlock IsTextSelectionEnabled="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.TextsAreSelectableToggleState, Mode=OneWay}" FontFamily="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Text="{x:Bind RequireHotpatchID}" Style="{StaticResource ListViewCellTextBlock}" Grid.Column="14" Visibility="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.FileRulesColumnManager.ColumnVisibilities[14], Mode=OneWay}"/>
                                         <TextBlock IsTextSelectionEnabled="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.TextsAreSelectableToggleState, Mode=OneWay}" FontFamily="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Text="{x:Bind MinimumHotpatchSequence}" Style="{StaticResource ListViewCellTextBlock}" Grid.Column="15" Visibility="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.FileRulesColumnManager.ColumnVisibilities[15], Mode=OneWay}"/>
                                         <TextBlock IsTextSelectionEnabled="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.TextsAreSelectableToggleState, Mode=OneWay}" FontFamily="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Text="{x:Bind MaximumHotpatchSequence}" Style="{StaticResource ListViewCellTextBlock}" Grid.Column="16" Visibility="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.FileRulesColumnManager.ColumnVisibilities[16], Mode=OneWay}"/>
+                                        <TextBlock IsTextSelectionEnabled="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.TextsAreSelectableToggleState, Mode=OneWay}" FontFamily="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.AppSettings.ListViewFontFamily, Mode=OneWay}" Text="{x:Bind Publisher}" Style="{StaticResource ListViewCellTextBlock}" Grid.Column="17" Visibility="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.FileRulesColumnManager.ColumnVisibilities[17], Mode=OneWay}"/>
                                     </Grid>
                                 </DataTemplate>
                             </customUI:ListViewV2.ItemTemplate>

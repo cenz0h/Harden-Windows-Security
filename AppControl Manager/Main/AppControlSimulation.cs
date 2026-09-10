@@ -153,9 +153,25 @@ internal static class AppControlSimulation
 
 		cToken?.ThrowIfCancellationRequested();
 
+		#region Region Deny rules
+
+		// Deny rules that match on a hash, a file path or file attributes.
+		DenyRuleSet DenyRules = DenyRuleEvaluator.Extract(policyObj);
+
+		// Deny signers are matched by the Arbitrator using the full certificate logic.
+		bool HasDenySigners = SignerInfo.Any(signer => !signer.IsAllowed);
+
+		bool HasAnyDenyRules = DenyRules.HasAny || HasDenySigners;
+
+		#endregion
+
 		#region Region Making Sure No AllowAll Rule Exists
 
-		if (PreDeploymentChecks.CheckForAllowAll(policyObj))
+		// A deny-list policy (the output of "Create Deny Policy") intentionally contains AllowAll rules:
+		// it allows everything and blocks specific things. Short-circuiting on AllowAll would make such a
+		// policy impossible to simulate, so only bail out when there is genuinely nothing to evaluate,
+		// i.e. the policy allows everything AND denies nothing.
+		if (PreDeploymentChecks.CheckForAllowAll(policyObj) && !HasAnyDenyRules)
 		{
 			Logger.Write(Atlas.GetStr("PolicyAllowsAllFilesMessage"));
 
@@ -231,6 +247,76 @@ internal static class AppControlSimulation
 						// So here we prioritize being authorized by file hash over being authorized by Signature
 
 						FileInfo CurrentFilePathObj = new(CurrentFilePath);
+
+						// In App Control a Deny rule always beats an Allow rule, so the deny checks run
+						// before anything that could authorize the file. Hashes and version-resource
+						// attributes are only read when the policy actually has rules that need them.
+						if (HasAnyDenyRules)
+						{
+							string? DenyCheckSHA256 = null;
+							string? DenyCheckSHA1 = null;
+
+							if (DenyRules.Hashes.Count > 0)
+							{
+								try
+								{
+									CodeIntegrityHashes DenyCheckHashes = CiFileHash.GetCiFileHashes(CurrentFilePathObj.FullName);
+									DenyCheckSHA256 = DenyCheckHashes.SHA256Authenticode;
+									DenyCheckSHA1 = DenyCheckHashes.SHA1Authenticode;
+								}
+								catch
+								{
+									// Unreadable - the remaining deny checks can still apply.
+								}
+							}
+
+							ExFileInfo? DenyCheckFileInfo = null;
+
+							if (DenyRules.AttributeRules.Count > 0)
+							{
+								try
+								{
+									DenyCheckFileInfo = GetExtendedFileAttrib.Get(CurrentFilePathObj.FullName);
+								}
+								catch
+								{
+									// No readable version resource - attribute rules simply won't match.
+								}
+							}
+
+							(SimulationOutputSource Source, string Reason)? DenyHit = DenyRuleEvaluator.Evaluate(
+								DenyRules,
+								CurrentFilePathObj.FullName,
+								DenyCheckSHA256,
+								DenyCheckSHA1,
+								DenyCheckFileInfo);
+
+							if (DenyHit is not null)
+							{
+								_ = FinalSimulationResults.TryAdd(CurrentFilePathObj.FullName,
+									new SimulationOutput(
+										CurrentFilePathObj.Name,
+										DenyHit.Value.Source,
+										false,
+										null,
+										null,
+										null,
+										null,
+										null,
+										null,
+										DenyHit.Value.Reason,
+										null,
+										null,
+										null,
+										null,
+										null,
+										CurrentFilePathObj.FullName
+									));
+
+								// Move to the next file
+								continue;
+							}
+						}
 
 						if (HasFilePathRules && FilePathRules.Contains(CurrentFilePathObj.FullName))
 						{
@@ -441,6 +527,40 @@ internal static class AppControlSimulation
 										GetCertificateDetails.Get(FileSignatureResults), //  Get all of the details of all certificates of the signed file
 										SignerInfo, // The entire Signer Info of the App Control Policy file
 										ekuOIDs);
+
+									// Deny signers win over allow signers, so check them first. A match here
+									// means a Deny signer covers this file - the Arbitrator reports a match
+									// as IsAuthorized, which for the deny pass means "blocked".
+									if (HasDenySigners)
+									{
+										SimulationOutput DenySignerResult = Arbitrator.Compare(inPutSim, evaluateDeniedSigners: true);
+
+										if (DenySignerResult.IsAuthorized)
+										{
+											_ = FinalSimulationResults.TryAdd(CurrentFilePathObj.FullName,
+												new SimulationOutput(
+													CurrentFilePathObj.Name,
+													SimulationOutputSource.DeniedBySigner,
+													false,
+													DenySignerResult.SignerID,
+													DenySignerResult.SignerName,
+													DenySignerResult.SignerCertRoot,
+													DenySignerResult.SignerCertPublisher,
+													DenySignerResult.SignerScope,
+													DenySignerResult.SignerFileAttributeIDs,
+													$"Blocked by Deny signer ({DenySignerResult.MatchCriteria})",
+													DenySignerResult.SpecificFileNameLevelMatchCriteria,
+													DenySignerResult.CertSubjectCN,
+													DenySignerResult.CertIssuerCN,
+													DenySignerResult.CertNotAfter,
+													DenySignerResult.CertTBSValue,
+													CurrentFilePathObj.FullName
+												));
+
+											// Move to the next file
+											continue;
+										}
+									}
 
 									SimulationOutput ComparisonResult = Arbitrator.Compare(inPutSim);
 

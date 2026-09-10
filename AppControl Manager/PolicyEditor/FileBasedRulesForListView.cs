@@ -58,9 +58,16 @@ internal sealed class FileBasedRulesForListView(
 	object source,
 	string? requireHotpatchID,
 	uint? minimumHotpatchSequence,
-	uint? maximumHotpatchSequence
+	uint? maximumHotpatchSequence,
+	string? publisher = null
 	)
 {
+	/// <summary>
+	/// The signing certificate behind this rule, resolved from the signer that references the rule's
+	/// FileAttrib. Null for hash / file path / file name rules, which have no publisher.
+	/// </summary>
+	internal string? Publisher => publisher;
+
 	internal string? Id => id;
 	internal string? FriendlyName => friendlyName;
 	internal string? FileName => fileName;

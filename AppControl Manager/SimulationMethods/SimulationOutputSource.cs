@@ -25,5 +25,12 @@ internal enum SimulationOutputSource
 	Unsigned,
 	CatalogSigned,
 	Hash,
-	FilePath
+	FilePath,
+
+	// Deny sources. In App Control a Deny rule always wins over an Allow rule, so when any of these
+	// match the file is reported as blocked regardless of what would otherwise have authorized it.
+	DeniedByHash,
+	DeniedByFilePath,
+	DeniedByFileAttribute,
+	DeniedBySigner
 }

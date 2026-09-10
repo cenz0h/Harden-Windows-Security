@@ -111,7 +111,8 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 			new("Type", "Type", x => x.Type, useRawHeader: true),
 			new("RequireHotpatchID", "RequireHotpatchIDHeader/Text", x => x.RequireHotpatchID, defaultVisibility: Visibility.Collapsed),
 			new("MinimumHotpatchSequence", "MinimumHotpatchSequenceHeader/Text", x => x.MinimumHotpatchSequence?.ToString(), defaultVisibility: Visibility.Collapsed),
-			new("MaximumHotpatchSequence", "MaximumHotpatchSequenceHeader/Text", x => x.MaximumHotpatchSequence?.ToString(), defaultVisibility: Visibility.Collapsed)
+			new("MaximumHotpatchSequence", "MaximumHotpatchSequenceHeader/Text", x => x.MaximumHotpatchSequence?.ToString(), defaultVisibility: Visibility.Collapsed),
+			new("Publisher", "PublisherHeader/Text", x => x.Publisher)
 		]);
 
 		// Initialize Signature Rules Column Manager
@@ -482,9 +483,14 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 
 				FileAttributesCount = $"• File Attributes count: {fileAttribs.Count}";
 
+				// Resolve FileAttrib ID -> publisher(s) once instead of rescanning the signers per row.
+				Dictionary<string, string> publisherByFileAttribID = BuildPublisherLookup();
+
 				// Add each FileAttrib to the ListView
 				foreach (FileAttrib item in CollectionsMarshal.AsSpan(fileAttribs))
 				{
+					_ = publisherByFileAttribID.TryGetValue(item.ID, out string? resolvedPublisher);
+
 					PolicyEditor.FileBasedRulesForListView temp4 = new
 					(
 						id: item.ID,
@@ -505,7 +511,8 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 						source: item,
 						requireHotpatchID: null,
 						minimumHotpatchSequence: null,
-						maximumHotpatchSequence: null
+						maximumHotpatchSequence: null,
+						publisher: resolvedPublisher
 					);
 
 					FileRulesCollection.Add(temp4);
@@ -1637,6 +1644,49 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 	}
 
 	/// <summary>
+	/// Maps every FileAttrib ID in the loaded policy to the publisher(s) of the signer(s) that reference
+	/// it, so the rules list can show a Publisher column without rescanning the signers for each row.
+	/// </summary>
+	private Dictionary<string, string> BuildPublisherLookup()
+	{
+		Dictionary<string, string> lookup = new(StringComparer.OrdinalIgnoreCase);
+
+		if (SelectedPolicy?.PolicyObj.Signers is null)
+			return lookup;
+
+		foreach (Signer signer in SelectedPolicy.PolicyObj.Signers)
+		{
+			if (signer.FileAttribRef is null)
+				continue;
+
+			// Prefer the leaf certificate's subject (the real publisher) over the intermediate name.
+			string? name = signer.CertPublisher?.Value ?? signer.Name;
+
+			if (string.IsNullOrWhiteSpace(name))
+				continue;
+
+			foreach (FileAttribRef reference in signer.FileAttribRef)
+			{
+				if (string.IsNullOrWhiteSpace(reference.RuleID))
+					continue;
+
+				if (lookup.TryGetValue(reference.RuleID, out string? existing))
+				{
+					// A FileAttrib can be referenced by more than one signer.
+					if (!existing.Contains(name, StringComparison.OrdinalIgnoreCase))
+						lookup[reference.RuleID] = $"{existing}, {name}";
+				}
+				else
+				{
+					lookup[reference.RuleID] = name;
+				}
+			}
+		}
+
+		return lookup;
+	}
+
+	/// <summary>
 	/// Finds the publisher behind a rule element for display in the editor.
 	///
 	/// Only FileAttrib rules (FilePublisher / WHQLFilePublisher) have a publisher: the signer that
@@ -1698,7 +1748,8 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 		source: old.Source,
 		requireHotpatchID: old.RequireHotpatchID,
 		minimumHotpatchSequence: old.MinimumHotpatchSequence,
-		maximumHotpatchSequence: old.MaximumHotpatchSequence);
+		maximumHotpatchSequence: old.MaximumHotpatchSequence,
+		publisher: old.Publisher);
 
 	/// <summary>
 	/// Swaps a rule row for its rebuilt version in both the displayed collection and its backing list.

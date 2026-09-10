@@ -31,8 +31,16 @@ internal static class Arbitrator
 	/// The method that compares the signer information from the App Control policy XML file with the certificate details of the signed file
 	/// </summary>
 	/// <param name="simulationInput">The SimulationInput object that contains the necessary information for the simulation</param>
+	/// <param name="evaluateDeniedSigners">
+	/// When false (the default) the file is matched against the policy's ALLOWED signers, and a returned
+	/// <see cref="SimulationOutput.IsAuthorized"/> of true means "this signer authorizes the file".
+	///
+	/// When true the exact same matching logic is run against the policy's DENIED signers instead. In that
+	/// mode a returned IsAuthorized of true means "this deny signer MATCHES the file", i.e. the file is
+	/// blocked - the caller is responsible for translating that into a deny verdict.
+	/// </param>
 	/// <returns></returns>
-	internal static SimulationOutput Compare(SimulationInput simulationInput)
+	internal static SimulationOutput Compare(SimulationInput simulationInput, bool evaluateDeniedSigners = false)
 	{
 		// Get the extended file attributes
 		ExFileInfo ExtendedFileInfo = GetExtendedFileAttrib.Get(simulationInput.FilePath.FullName);
@@ -40,8 +48,9 @@ internal static class Arbitrator
 		// Loop through each signer in the signer information array, these are the signers in the XML policy file
 		foreach (SignerX signer in CollectionsMarshal.AsSpan(simulationInput.SignerInfo))
 		{
-			// Make sure it's an allowed signer and not a denier
-			if (!signer.IsAllowed) continue;
+			// Only consider the kind of signer we were asked about: allowers normally, deniers when the
+			// caller is checking whether a Deny signer blocks this file.
+			if (signer.IsAllowed == evaluateDeniedSigners) continue;
 
 #if DEBUG
 			Logger.Write($"Checking the signer: {signer.Name}");
