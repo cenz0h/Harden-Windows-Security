@@ -632,7 +632,9 @@ internal sealed partial class CreateSupplementalPolicyVM : ViewModelBase, IDispo
 				return;
 			}
 
-			using FilePublisherRuleEditorDialog dialog = new(selected);
+			List<IPublisherRuleEditTarget> targets = [.. selected.Select(f => new FileIdentityEditTarget(f))];
+
+			using FilePublisherRuleEditorDialog dialog = new(targets);
 
 			if (await dialog.ShowAsync() is ContentDialogResult.Primary)
 			{

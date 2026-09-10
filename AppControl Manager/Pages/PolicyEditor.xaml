@@ -335,6 +335,14 @@
                                         <Grid.ContextFlyout>
                                             <MenuFlyout>
 
+                                                <MenuFlyoutItem x:Uid="EditPublisherRuleMenuItem" Click="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.FileBasedRulesListView_EditPublisherRule}">
+                                                    <MenuFlyoutItem.Icon>
+                                                        <FontIcon Glyph="&#xE70F;" />
+                                                    </MenuFlyoutItem.Icon>
+                                                </MenuFlyoutItem>
+
+                                                <MenuFlyoutSeparator />
+
                                                 <MenuFlyoutItem x:Uid="DeleteRow" Click="{x:Bind VMs:ViewModelProvider.PolicyEditorVM.FileBasedRulesListView_DeleteItems}">
                                                     <MenuFlyoutItem.Icon>
                                                         <FontIcon Glyph="&#xE74D;" />

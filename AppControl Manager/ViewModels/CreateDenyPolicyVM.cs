@@ -18,6 +18,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using AppControlManager.Main;
@@ -1307,7 +1308,9 @@ internal sealed partial class CreateDenyPolicyVM : ViewModelBase, IDisposable
 				return;
 			}
 
-			using FilePublisherRuleEditorDialog dialog = new(selected);
+			List<IPublisherRuleEditTarget> targets = [.. selected.Select(f => new FileIdentityEditTarget(f))];
+
+			using FilePublisherRuleEditorDialog dialog = new(targets);
 
 			if (await dialog.ShowAsync() is ContentDialogResult.Primary)
 			{

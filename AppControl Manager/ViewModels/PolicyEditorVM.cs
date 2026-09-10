@@ -23,6 +23,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using AppControlManager.CustomUIElements;
 using AppControlManager.Others;
+using AppControlManager.Pages;
 using AppControlManager.SiPolicy;
 using AppControlManager.SiPolicyIntel;
 using AppControlManager.XMLOps;
@@ -1567,6 +1568,113 @@ internal sealed partial class PolicyEditorVM : ViewModelBase
 	/// <summary>
 	/// Event handler for deleting selected items from the FileBasedRulesListView's Items Source
 	/// </summary>
+	/// <summary>
+	/// Opens the publisher rule editor for the selected file-based rules, so an already-built policy can
+	/// have its version range / file attributes adjusted and be redeployed WITHOUT rescanning the app.
+	///
+	/// The edits are written onto the underlying policy elements (Allow / Deny / FileAttrib / FileRule),
+	/// which is exactly what <c>SaveChanges</c> serializes back out.
+	/// </summary>
+	internal async void FileBasedRulesListView_EditPublisherRule()
+	{
+		try
+		{
+			ListView? lv = ListViewHelper.GetListViewFromCache(ListViewHelper.ListViewsRegistry.PolicyEditor_FileBasedRules);
+
+			if (lv is null) return;
+
+			List<PolicyEditor.FileBasedRulesForListView> selectedRows = lv.SelectedItems.Cast<PolicyEditor.FileBasedRulesForListView>().ToList();
+
+			if (selectedRows.Count is 0)
+			{
+				MainInfoBar.WriteWarning(Atlas.GetStr("SelectRowsToEditRuleMsg"));
+				return;
+			}
+
+			// Pair every selected row with the policy element it represents.
+			List<(PolicyEditor.FileBasedRulesForListView Row, IPublisherRuleEditTarget Target)> pairs = [];
+
+			foreach (PolicyEditor.FileBasedRulesForListView row in CollectionsMarshal.AsSpan(selectedRows))
+			{
+				object? element = row.SourceType switch
+				{
+					PolicyEditor.FileBasedRuleType.Allow => ((AllowRule)row.Source).AllowElement,
+					PolicyEditor.FileBasedRuleType.Deny => ((DenyRule)row.Source).DenyElement,
+					PolicyEditor.FileBasedRuleType.FileRule => ((FileRuleRule)row.Source).FileRuleElement,
+					// FileAttrib rows (FilePublisher / WHQLFilePublisher) already hold the element itself.
+					PolicyEditor.FileBasedRuleType.CompoundPublisher => row.Source,
+					_ => null
+				};
+
+				if (element is not null)
+					pairs.Add((row, new PolicyElementEditTarget(element)));
+			}
+
+			if (pairs.Count is 0)
+			{
+				MainInfoBar.WriteWarning(Atlas.GetStr("NoEditableRuleSelectedMsg"));
+				return;
+			}
+
+			using FilePublisherRuleEditorDialog dialog = new([.. pairs.Select(p => p.Target)]);
+
+			if (await dialog.ShowAsync() is ContentDialogResult.Primary)
+			{
+				// The row model is immutable and the cells are bound OneTime, so swap in rebuilt rows
+				// to surface the change in the ListView.
+				foreach ((PolicyEditor.FileBasedRulesForListView row, IPublisherRuleEditTarget target) in CollectionsMarshal.AsSpan(pairs))
+				{
+					ReplaceFileRuleRow(row, RebuildFileRuleRow(row, target));
+				}
+
+				MainInfoBar.WriteSuccess(string.Format(Atlas.GetStr("RuleEditAppliedPolicyEditorMsg"), pairs.Count));
+			}
+		}
+		catch (Exception ex)
+		{
+			MainInfoBar.WriteError(ex);
+		}
+	}
+
+	/// <summary>
+	/// Produces a copy of a rule row carrying the freshly edited values. Everything the editor doesn't
+	/// touch is copied straight across, including the Source reference so Save still works.
+	/// </summary>
+	private static PolicyEditor.FileBasedRulesForListView RebuildFileRuleRow(PolicyEditor.FileBasedRulesForListView old, IPublisherRuleEditTarget target) => new(
+		id: old.Id,
+		friendlyName: old.FriendlyName,
+		fileName: target.OriginalFileName,
+		internalName: target.InternalName,
+		fileDescription: target.FileDescription,
+		productName: target.ProductName,
+		packageFamilyName: old.PackageFamilyName,
+		packageVersion: old.PackageVersion,
+		minimumFileVersion: target.MinVersion?.ToString(),
+		maximumFileVersion: target.MaxVersion?.ToString(),
+		hash: old.Hash,
+		appIDs: old.AppIDs,
+		filePath: old.FilePath,
+		type: old.Type,
+		sourceType: old.SourceType,
+		source: old.Source,
+		requireHotpatchID: old.RequireHotpatchID,
+		minimumHotpatchSequence: old.MinimumHotpatchSequence,
+		maximumHotpatchSequence: old.MaximumHotpatchSequence);
+
+	/// <summary>
+	/// Swaps a rule row for its rebuilt version in both the displayed collection and its backing list.
+	/// </summary>
+	private void ReplaceFileRuleRow(PolicyEditor.FileBasedRulesForListView old, PolicyEditor.FileBasedRulesForListView rebuilt)
+	{
+		int displayedIndex = FileRulesCollection.IndexOf(old);
+		if (displayedIndex >= 0)
+			FileRulesCollection[displayedIndex] = rebuilt;
+
+		int backingIndex = FileRulesCollectionList.IndexOf(old);
+		if (backingIndex >= 0)
+			FileRulesCollectionList[backingIndex] = rebuilt;
+	}
+
 	internal void FileBasedRulesListView_DeleteItems()
 	{
 		// Get the ListView ScrollViewer info

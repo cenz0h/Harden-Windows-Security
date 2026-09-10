@@ -904,6 +904,12 @@ NOTE: This option is always enforced if any App Control UMCI policy enables it. 
   <data name="EditPublisherRuleMenuItem.Text" xml:space="preserve">
     <value>Edit publisher rule...</value>
   </data>
+  <data name="NoEditableRuleSelectedMsg" xml:space="preserve">
+    <value>None of the selected rules expose editable file attributes or a version range.</value>
+  </data>
+  <data name="RuleEditAppliedPolicyEditorMsg" xml:space="preserve">
+    <value>Updated {0} rule(s). Use Save to write the changes back to the policy file.</value>
+  </data>
   <data name="RuleOptionsDroppedSupplementalMsg" xml:space="preserve">
     <value>Applied and saved, but these options were not set because they don't apply to a Supplemental policy: {0}. Options like Audit Mode belong on the base policy - a supplemental inherits enforcement/audit from its base. Load the base policy to change them.</value>
   </data>

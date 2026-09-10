@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using AppControlManager.CustomUIElements;
-using CommonCore.IntelGathering;
+using AppControlManager.Others;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -48,27 +48,27 @@ internal sealed partial class FilePublisherRuleEditorDialog : ContentDialogV2, I
 		AnyVersion = 4
 	}
 
-	private readonly List<FileIdentity> _targets;
+	private readonly List<IPublisherRuleEditTarget> _targets;
 
-	internal FilePublisherRuleEditorDialog(List<FileIdentity> targets)
+	internal FilePublisherRuleEditorDialog(List<IPublisherRuleEditTarget> targets)
 	{
 		InitializeComponent();
 		_targets = targets;
 
 		// Seed the fields from the first row so the dialog opens showing real values.
-		FileIdentity? first = targets.Count > 0 ? targets[0] : null;
+		IPublisherRuleEditTarget? first = targets.Count > 0 ? targets[0] : null;
 
 		if (first is not null)
 		{
-			MinVersionText = first.FileVersion?.ToString() ?? string.Empty;
-			MaxVersionText = first.MaxFileVersion?.ToString() ?? string.Empty;
+			MinVersionText = first.MinVersion?.ToString() ?? string.Empty;
+			MaxVersionText = first.MaxVersion?.ToString() ?? string.Empty;
 
 			// Reflect the row's existing constraint in the mode picker.
-			VersionModeIndex = first.MaxFileVersion is null
-				? (int)VersionMode.AndAbove
-				: first.FileVersion is null
+			VersionModeIndex = first.MaxVersion is null
+				? (first.MinVersion is null ? (int)VersionMode.AnyVersion : (int)VersionMode.AndAbove)
+				: first.MinVersion is null
 					? (int)VersionMode.AndBelow
-					: first.FileVersion.Equals(first.MaxFileVersion)
+					: first.MinVersion.Equals(first.MaxVersion)
 						? (int)VersionMode.Exactly
 						: (int)VersionMode.CustomRange;
 
@@ -205,10 +205,10 @@ internal sealed partial class FilePublisherRuleEditorDialog : ContentDialogV2, I
 				break;
 		}
 
-		foreach (FileIdentity target in _targets)
+		foreach (IPublisherRuleEditTarget target in _targets)
 		{
-			target.FileVersion = min;
-			target.MaxFileVersion = max;
+			target.MinVersion = min;
+			target.MaxVersion = max;
 
 			if (IsSingle)
 			{
